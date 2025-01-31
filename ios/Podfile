@@ -1,17 +1,16 @@
-require File.expand_path('flutter/bin/flutter', __FILE__)
+flutter_root = File.expand_path('../Flutter', __FILE__)
+load File.join(flutter_root, 'flutter_export_environment.rb') if File.exist?(File.join(flutter_root, 'flutter_export_environment.rb'))
 
 platform :ios, '12.0'
 
 # Ensure Flutter plugin files are correctly included
-flutter_root = File.expand_path('../Flutter', __FILE__)
-if File.exist?(File.join(flutter_root, 'flutter_export_environment.rb'))
-  load File.join(flutter_root, 'flutter_export_environment.rb')
-end
-if File.exist?(File.join(flutter_root, 'generated_plugins.rb'))
-  load File.join(flutter_root, 'generated_plugins.rb')
-end
 
+# Ensure CocoaPods and Flutter paths are correct
+flutter_root = File.expand_path('..', Dir.pwd) + '/flutter'
+load File.join(flutter_root, 'flutter_export_environment.rb') if File.exist?(File.join(flutter_root, 'flutter_export_environment.rb'))
 
+load File.join(flutter_root, 'generated_plugins.rb') if File.exist?(File.join(flutter_root, 'generated_plugins.rb'))
+ 
 target 'Runner' do
   use_frameworks! 
   use_modular_headers!
