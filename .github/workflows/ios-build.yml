@@ -1,6 +1,5 @@
 name: iOS IPA Build (No Mac Needed)
 
-
 on:
   push:
     branches:
@@ -8,10 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14  # Ensure latest macOS version is used
+    runs-on: macos-14  # Latest macOS with Xcode 15.2
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Flutter
         run: |
@@ -21,7 +20,7 @@ jobs:
           flutter --version
 
       - name: Install Xcode Command Line Tools
-        run: sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
       - name: Install CocoaPods
         run: |
@@ -43,10 +42,23 @@ jobs:
           pod install --repo-update
 
       - name: Build iOS IPA (No Code Signing)
-        run: flutter build ipa --no-codesign --verbose
+        run: flutter build ios --no-codesign --verbose
+
+      - name: Archive the IPA
+        run: |
+          cd ios
+          xcodebuild -scheme Runner -archivePath ../build/ios/archive/Runner.xcarchive archive
+
+      - name: Export IPA
+        run: |
+          cd ios
+          xcodebuild -exportArchive \
+            -archivePath ../build/ios/archive/Runner.xcarchive \
+            -exportPath ../build/ios/ipa \
+            -exportOptionsPlist ExportOptions.plist
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/archive/
+          path: build/ios/ipa/
