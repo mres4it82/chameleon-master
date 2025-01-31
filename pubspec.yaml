@@ -79,9 +79,6 @@ dependencies:
   datetime_picker_formfield: ^2.0.0
   internet_connection_checker: ^1.0.0+1
 
-    jobs:
-    build:
-      runs-on: macos-latest  # Must use a macOS runner
       
   flutter:
     sdk: flutter
