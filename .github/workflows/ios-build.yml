@@ -26,7 +26,10 @@ jobs:
           flutter pub get
           cd ios
           rm -rf Pods Podfile.lock
+          pod deintegrate
           pod install --repo-update
 
+
       - name: Build iOS IPA (No Code Signing)
-        run: flutter build ios --no-codesign
+        run: flutter build ios --no-codesign --verbose
+
