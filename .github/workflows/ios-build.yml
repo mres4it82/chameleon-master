@@ -3,14 +3,15 @@ name: iOS IPA Build (No Mac Needed)
 on:
   push:
     branches:
-      - feature-branch   # Change this if your branch is different
+      - feature-branch  # Change this if your branch is different
 
 jobs:
   build:
-    runs-on: macos-14  # Latest macOS with Xcode 15.2
+    runs-on: macos-14  # Use the latest macOS version
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Updated to latest version
 
       - name: Install Flutter
         run: |
@@ -20,19 +21,14 @@ jobs:
           flutter --version
 
       - name: Install Xcode Command Line Tools
-        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer
 
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           pod --version
 
-      - name: Check Flutter and Xcode Setup
-        run: |
-          flutter doctor -v
-          xcodebuild -version
-
-      - name: Clean and Reinstall Dependencies
+      - name: Clean and Install Dependencies
         run: |
           flutter clean
           flutter pub get
@@ -40,25 +36,13 @@ jobs:
           rm -rf Pods Podfile.lock
           pod deintegrate
           pod install --repo-update
+          cd ..
 
       - name: Build iOS IPA (No Code Signing)
-        run: flutter build ios --no-codesign --verbose
-
-      - name: Archive the IPA
-        run: |
-          cd ios
-          xcodebuild -scheme Runner -archivePath ../build/ios/archive/Runner.xcarchive archive
-
-      - name: Export IPA
-        run: |
-          cd ios
-          xcodebuild -exportArchive \
-            -archivePath ../build/ios/archive/Runner.xcarchive \
-            -exportPath ../build/ios/ipa \
-            -exportOptionsPlist ExportOptions.plist
+        run: flutter build ipa --no-codesign --verbose
 
       - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4  # Updated to latest version
         with:
           name: ios-build
-          path: build/ios/ipa/
+          path: build/ios/archive/
