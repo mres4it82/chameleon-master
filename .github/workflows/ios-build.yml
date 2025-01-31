@@ -12,12 +12,14 @@ jobs:
         run: |
           git clone https://github.com/flutter/flutter.git -b stable --depth 1
           echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
-          export PATH="$GITHUB_WORKSPACE/flutter/bin:$PATH"
+          echo "export PATH=$GITHUB_WORKSPACE/flutter/bin:$PATH" >> ~/.bashrc
+          source ~/.bashrc
           flutter --version
 
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
+          pod setup
           pod --version
 
       - name: Install Dependencies
@@ -25,11 +27,18 @@ jobs:
           flutter clean
           flutter pub get
           cd ios
-          rm -rf Pods Podfile.lock
           pod deintegrate
+          rm -rf Pods Podfile.lock
           pod install --repo-update
 
+      - name: Precache Flutter for iOS
+        run: flutter precache --ios
 
       - name: Build iOS IPA (No Code Signing)
         run: flutter build ios --no-codesign --verbose
 
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: iOS-Build
+          path: build/ios/iphoneos/*.ipa
