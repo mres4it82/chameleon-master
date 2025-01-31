@@ -3,7 +3,7 @@ name: iOS IPA Build (No Mac Needed)
 on:
   push:
     branches:
-      - master   # Change this if your branch is different
+      - feature-branch   # Change this if your branch is different
 
 jobs:
   build:
