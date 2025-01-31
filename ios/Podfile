@@ -1,20 +1,18 @@
-# Uncomment the next line to define a global platform for your project
 platform :ios, '12.0'
 
 target 'Runner' do
-  # Enables dynamic frameworks (Fix for Swift dependency issues)
-  use_frameworks!
+  # Use modular headers to prevent conflicts
+  use_modular_headers!
 
   # Pods for Runner
-  pod 'DKPhotoGallery', :modular_headers => true
-  pod 'SDWebImage', :modular_headers => true
+  pod 'DKPhotoGallery'
+  pod 'SDWebImage'
 
-  # Additional dependencies can be added here if needed
-  
+  # Ensure Flipper is disabled if not needed
+  # use_flipper!({ 'Flipper' => '0.125.0' })  # Uncomment if needed
+
   target 'RunnerTests' do
     inherit! :search_paths
     # Pods for testing
   end
-
-
 end
