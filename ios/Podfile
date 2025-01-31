@@ -1,6 +1,6 @@
 platform :ios, '12.0'
 
-# Ensure the flutter_root is set correctly
+# Flutter root path
 flutter_root = File.expand_path('../Flutter', __FILE__)
 
 # Load the Flutter environment export file
@@ -13,10 +13,10 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Ensure Flutter dependencies are installed correctly
-  pod 'Flutter', :path => File.join(flutter_root, 'engine', 'ios')
+  # Ensure Flutter dependencies are correctly handled
+  pod 'Flutter', :path => File.expand_path('..', __FILE__) + '/Flutter'
 
-  # Add your other iOS dependencies here
+  # Add other iOS dependencies here
   pod 'DKPhotoGallery', :modular_headers => true
   pod 'SDWebImage', :modular_headers => true
   
