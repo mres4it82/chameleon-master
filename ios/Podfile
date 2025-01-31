@@ -1,4 +1,4 @@
-require File.expand_path('flutter', File.dirname(`which flutter`))
+require File.expand_path('flutter/bin/flutter', __FILE__)
 
 platform :ios, '12.0'
 
