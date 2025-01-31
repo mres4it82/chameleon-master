@@ -1,4 +1,4 @@
-require_relative '../flutter_module/.ios/Flutter/fluttertools.rb'
+require File.expand_path('flutter', File.dirname(`which flutter`))
 
 platform :ios, '12.0'
 
