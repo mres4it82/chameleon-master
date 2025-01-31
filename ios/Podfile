@@ -13,8 +13,8 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Ensure Flutter plugins are installed correctly
-  flutter_install_all_ios_pods(flutter_root)
+  # Ensure Flutter dependencies are installed correctly
+  pod 'Flutter', :path => File.join(flutter_root, 'engine', 'ios')
 
   # Add your other iOS dependencies here
   pod 'DKPhotoGallery', :modular_headers => true
