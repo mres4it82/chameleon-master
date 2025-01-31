@@ -20,7 +20,7 @@ jobs:
           flutter --version
 
       - name: Install Xcode Command Line Tools
-        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer
 
       - name: Install CocoaPods
         run: |
