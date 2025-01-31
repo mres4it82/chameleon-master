@@ -1,16 +1,16 @@
 platform :ios, '12.0'
 
 target 'Runner' do
-  # Use modular headers to prevent conflicts
+  use_frameworks!  # Ensure dynamic frameworks are enabled
   use_modular_headers!
 
-  # Pods for Runner
-  pod 'DKPhotoGallery'
-  pod 'SDWebImage'
+  # Fix for connectivity_plus and other dependencies
+  pod 'connectivity_plus', :modular_headers => true
+  pod 'DKPhotoGallery', :modular_headers => true
+  pod 'SDWebImage', :modular_headers => true
 
-  # Ensure Flipper is disabled if not needed
-  # use_flipper!({ 'Flipper' => '0.125.0' })  # Uncomment if needed
-
+  # Additional dependencies can be added here if needed
+  
   target 'RunnerTests' do
     inherit! :search_paths
     # Pods for testing
