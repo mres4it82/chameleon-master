@@ -41,7 +41,7 @@ jobs:
           cd ..
 
       - name: Build iOS IPA (No Code Signing)
-        run: flutter build ipa --no-codesign --verbose
+        run: flutter build ios --no-codesign --verbose
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4  # Updated to latest version
