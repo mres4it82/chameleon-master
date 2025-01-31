@@ -37,6 +37,7 @@ jobs:
           pod cache clean --all
           pod repo update
           pod deintegrate
+          pod setup
           pod install --repo-update
           cd ..
 
