@@ -23,20 +23,24 @@ jobs:
           pod setup
           pod --version
 
+      - name: Install Xcode Command Line Tools
+        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+
       - name: Install Dependencies
         run: |
           flutter clean
           flutter pub get
           cd ios
-          pod deintegrate
           rm -rf Pods Podfile.lock
+          pod deintegrate
           pod install --repo-update
+
 
       - name: Precache Flutter for iOS
         run: flutter precache --ios
 
       - name: Build iOS IPA (No Code Signing)
-        run: flutter build ios --no-codesign --verbose
+        run: flutter build ipa --no-codesign --verbose
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
