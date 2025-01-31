@@ -1,25 +1,22 @@
 platform :ios, '12.0'
 
-# Flutter root path
-flutter_root = File.expand_path('../Flutter', __FILE__)
+# Set the Flutter root path
+flutter_root = '/path/to/flutter'  # Adjust this path to your Flutter SDK or project location
 
-# Load the Flutter environment export file
-load File.join(flutter_root, 'flutter_export_environment.rb') if File.exist?(File.join(flutter_root, 'flutter_export_environment.rb'))
-
-# Load the generated Flutter plugins (only if it exists)
-load File.join(flutter_root, 'generated_plugins.rb') if File.exist?(File.join(flutter_root, 'generated_plugins.rb'))
+# Load Flutter's environment script
+load File.join(flutter_root, 'packages/flutter_tools/bin/xcode_backend/flutter_export_environment.rb') if File.exist?(File.join(flutter_root, 'packages/flutter_tools/bin/xcode_backend/flutter_export_environment.rb'))
 
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Ensure Flutter dependencies are correctly handled
-  pod 'Flutter', :path => File.expand_path('..', __FILE__) + '/Flutter'
+  # Flutter pod integration
+  pod 'Flutter', :path => flutter_root
 
-  # Add other iOS dependencies here
+  # Additional dependencies
   pod 'DKPhotoGallery', :modular_headers => true
   pod 'SDWebImage', :modular_headers => true
-  
+
   target 'RunnerTests' do
     inherit! :search_paths
   end
