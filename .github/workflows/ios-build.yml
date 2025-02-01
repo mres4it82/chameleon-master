@@ -28,24 +28,4 @@ jobs:
         run: |
           mkdir -p ios/Flutter
           touch ios/Flutter/Flutter.podspec
-          echo "{}" > ios/Flutter/Flutter.podspec
-
-      - name: Install CocoaPods Dependencies
-        run: |
-          # Set Flutter root path
-          flutter_root=$(pwd)/flutter
-          
-          # Ensure the Flutter podspec is linked correctly
-          echo "flutter_root = '${flutter_root}'" >> ios/Podfile
-          
-          # Run 'flutter create .' to generate necessary iOS files if not already present
-          flutter create .
-
-          # Install CocoaPods dependencies
-          cd ios
-          sudo gem install cocoapods
-          pod repo update
-          pod install --verbose
-
-      - name: Build iOS App (Without Signing)
-        run: flutter build ios --release --no-codesign
+          echo "{}" > ios/Flutter/Flutter.po
