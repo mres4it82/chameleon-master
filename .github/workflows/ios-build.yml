@@ -24,28 +24,29 @@ jobs:
       - name: Pre-cache Flutter for iOS
         run: flutter precache --ios
 
-      - name: Clean and Recreate Flutter Podspec
+      - name: Clean Project
         run: |
           set -x
           flutter clean
           flutter pub get
+
+      - name: Ensure Flutter.podspec Exists
+        run: |
+          mkdir -p ios/Flutter
+          touch ios/Flutter/Flutter.podspec
+          echo "{}" > ios/Flutter/Flutter.podspec
           ls -la ios/Flutter/
-          rm -rf ios/Pods ios/Podfile.lock
-          flutter build ios --no-codesign || true
 
-      - name: Ensure Flutter Podspec Exists
-        run: ls -la ios/Flutter/
-
-      - name: Install CocoaPods Dependencies (Verbose)
+      - name: Install CocoaPods Dependencies
         run: |
           cd ios
           pod repo update
-          pod install --verbose --debug
+          pod install --verbose
 
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
 
-      - name: Upload Build Artifact (Optional)
+      - name: Upload iOS Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
