@@ -39,15 +39,17 @@ jobs:
           flutter precache --ios
           flutter clean
           flutter pub get
+          flutter build ios --no-codesign || true
 
           PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
 
           if [ ! -f "$PODHELPER_PATH" ]; then
-            echo "podhelper.rb is missing. Regenerating..."
-#            flutter build ios --no-codesign || true
+            echo "podhelper.rb is missing. Trying alternative paths..."
+            find $FLUTTER_ROOT -name "podhelper.rb"  # Search for podhelper.rb
+          else
+            echo "podhelper.rb found!"
           fi
-
-          ls -l "$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/"
+      
 
       - name: Verify podhelper.rb content
         run: |
