@@ -24,11 +24,10 @@ jobs:
           # Move Flutter to a location in the home directory
           mv flutter $HOME/flutter
 
-          # Add Flutter to PATH
-          echo "export PATH=\$PATH:$HOME/flutter/bin" >> $GITHUB_ENV
-
       - name: Verify Flutter Installation
         run: |
+          echo "Adding Flutter to PATH"
+          export PATH="$HOME/flutter/bin:$PATH"
           flutter doctor -v
           flutter --version
 
