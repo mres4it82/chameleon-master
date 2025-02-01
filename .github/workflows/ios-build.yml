@@ -1,4 +1,4 @@
-name: Flutter iOS Build (No Signing)
+  name: Flutter iOS Build (No Signing)
 
 on:
   push:
@@ -32,9 +32,15 @@ jobs:
 
       - name: Install CocoaPods Dependencies
         run: |
+          pod 'Flutter', :path => flutter_root
+          flutter_root = '/path/to/flutter'
+          flutter create .
+          
           cd ios
+          sudo gem install cocoapods
           pod repo update
           pod install --verbose
+          
 
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
