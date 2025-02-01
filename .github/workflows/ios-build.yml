@@ -25,6 +25,9 @@ jobs:
           # Set FLUTTER_ROOT in the environment for the rest of the job
           echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
 
+          # Add Flutter to the PATH environment variable
+          echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
+
           # Verify Flutter SDK installation
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
