@@ -1,8 +1,9 @@
 platform :ios, '12.0'
 
-flutter_application_path = ENV['FLUTTER_ROOT'] || '/path/to/flutter'
+# In your Podfile
+flutter_application_path = '../..'
+podhelper_path = File.join(flutter_application_path, '.flutter', 'flutter_tools', 'bin', 'cache', 'artifacts', 'flutter_tools', 'podhelper.rb')
 
-podhelper_path = File.join(flutter_application_path, 'bin', 'cache', 'artifacts', 'flutter_tools', 'podhelper.rb')
 
 if File.exist?(podhelper_path)
   load podhelper_path
