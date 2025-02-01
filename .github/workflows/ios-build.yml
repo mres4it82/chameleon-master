@@ -32,12 +32,12 @@ jobs:
           # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
 
-      # Install Android SDK (Command Line Tools)
-      - name: Set up Android SDK (Command Line Tools)
-        run: |
-          # Set up Android SDK path
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          mkdir -p $ANDROID_SDK_ROOT
+#      # Install Android SDK (Command Line Tools)
+#      - name: Set up Android SDK (Command Line Tools)
+#        run: |
+#          # Set up Android SDK path
+#          export ANDROID_SDK_ROOT=$HOME/android-sdk
+#          mkdir -p $ANDROID_SDK_ROOT
           
           # Download and extract Android SDK command line tools
           curl -s https://dl.google.com/android/repository/commandlinetools-mac-6609375_latest.zip -o commandlinetools.zip
