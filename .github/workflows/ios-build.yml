@@ -27,33 +27,17 @@ jobs:
           
           # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
-          
-          # Clear the Flutter cache and ensure everything is fresh
-          flutter clean
-          flutter doctor -v
-          
-          # Verify Flutter SDK installation
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
-          ls -l $FLUTTER_ROOT
-          ls -l $FLUTTER_ROOT/packages/flutter_tools/
-          ls $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb
-      # Step to verify Flutter installation with flutter doctor
+
+      # Ensure Flutter is available in the environment
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
-          # Ensure FLUTTER_ROOT is set before running flutter doctor
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
           flutter doctor -v
+          flutter clean
+          flutter precache --ios
 
       # Checkout Repository to get your project files
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      # Verify Flutter SDK and files
-      - name: Verify Flutter SDK Path and Files
-        run: |
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
-          ls -l $FLUTTER_ROOT
-          ls -l $FLUTTER_ROOT/packages/flutter_tools/
 
       # Install Flutter dependencies
       - name: Install Flutter Dependencies
