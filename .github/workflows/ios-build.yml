@@ -31,11 +31,11 @@ jobs:
       - name: Clean project
         run: flutter clean
 
-      - name: Ensure Flutter iOS Artifacts Exist
-        run: |
-          flutter precache --ios
-          flutter pub get
-          flutter build ios --no-codesign
+#      - name: Ensure Flutter iOS Artifacts Exist
+#        run: |
+#          flutter precache --ios
+#          flutter pub get
+#          flutter build ios --no-codesign
 
       - name: Verify Flutter.podspec
         run: ls -la ios/.symlinks/flutter/
