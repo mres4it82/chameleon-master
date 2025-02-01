@@ -32,7 +32,7 @@ jobs:
           # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
 
-      # Install Android SDK (without Android Studio)
+      # Install Android SDK (Command Line Tools)
       - name: Set up Android SDK (Command Line Tools)
         run: |
           # Set up Android SDK path
@@ -44,8 +44,11 @@ jobs:
           unzip commandlinetools.zip -d $ANDROID_SDK_ROOT
           rm commandlinetools.zip
           
-          # Move cmdline-tools to the correct location
-          mv $ANDROID_SDK_ROOT/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+          # Ensure the cmdline-tools directory exists before moving
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
+
+          # Move extracted cmdline-tools to the correct location
+          mv $ANDROID_SDK_ROOT/cmdline-tools/* $ANDROID_SDK_ROOT/cmdline-tools/latest/
 
           # Accept licenses and install necessary SDK components
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
