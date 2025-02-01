@@ -3,9 +3,9 @@ platform :ios, '12.0'
 # Set Flutter paths correctly
 flutter_root = File.expand_path("..", File.dirname(__FILE__)) # Adjusted root detection
 flutter_application_path = File.expand_path("..", flutter_root)
-podhelper_path = File.join(flutter_root, 'ios/.flutter/bin/cache/artifacts/flutter_tools/podhelper.rb')
+flutter_root = File.expand_path("..", File.dirname(__FILE__))
+podhelper_path = File.join(flutter_root, 'bin/cache/artifacts/flutter_tools/podhelper.rb')
 
-# Ensure podhelper.rb exists before loading
 if File.exist?(podhelper_path)
   load podhelper_path
 else

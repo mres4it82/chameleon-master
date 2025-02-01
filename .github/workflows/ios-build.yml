@@ -42,16 +42,19 @@ jobs:
           flutter pub get
           flutter precache --ios
 
-          if [ ! -f "$PODHELPER_PATH" ]; then
-            echo "⚠️ podhelper.rb is missing! Running workaround..."
-            flutter build ios --no-codesign || true  # Forces Flutter to regenerate necessary files
-          fi
+          # Force Flutter to regenerate missing iOS dependencies
+          rm -rf "$FLUTTER_ROOT/bin/cache"
+          flutter doctor -v
+          flutter pub get
+          flutter precache --ios
+          flutter build ios --no-codesign || true
 
+          # Verify podhelper.rb exists
           if [ -f "$PODHELPER_PATH" ]; then
             echo "✅ podhelper.rb found!"
           else
             echo "❌ podhelper.rb is STILL missing!"
-            exit 1  # Fails workflow if not found
+            exit 1
           fi
 
       - name: Install CocoaPods dependencies
