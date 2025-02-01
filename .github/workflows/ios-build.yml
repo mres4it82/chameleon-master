@@ -47,6 +47,12 @@ jobs:
           touch ios/Flutter/Flutter.podspec
           echo "{}" > ios/Flutter/Flutter.podspec
 
+      # Install iOS dependencies via CocoaPods
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          pod install
+
       # Build iOS app without signing (for CI purposes)
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
