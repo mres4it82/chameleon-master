@@ -32,9 +32,16 @@ jobs:
           # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
 
+      # Set up Android SDK
+      - name: Set up Android SDK
+        uses: android-actions/setup-android-sdk@v2
+        with:
+          sdk-version: '30.0.3'
+
       # Ensure Flutter is available in the environment
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
+          flutter doctor --android-licenses
           flutter doctor -v
           flutter clean
           flutter precache --ios
