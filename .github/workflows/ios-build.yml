@@ -16,17 +16,17 @@ jobs:
       - name: Use Flutter Installed by Actions
         run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
 
-      - name: Install Flutter SDK
-        run: |
-          git clone https://github.com/flutter/flutter.git -b stable /Users/runner/flutter
-          echo "FLUTTER_ROOT=/Users/runner/flutter" >> $GITHUB_ENV
-          echo "PATH=$FLUTTER_ROOT/bin:$PATH" >> $GITHUB_ENV
-          echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
+      - name: Setup Flutter (Pre-installed Version)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.3'
+          channel: 'stable'
+
       - name: Verify Flutter Installation
         run: |
-          source $GITHUB_ENV
-          which flutter || echo "❌ Flutter not found in PATH!"
           flutter doctor -v
+          flutter --version
+      
 
       - name: Force Flutter to Download Required Artifacts
         run: |
