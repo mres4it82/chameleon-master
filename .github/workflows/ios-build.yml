@@ -10,29 +10,17 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # Checkout the repository to access your Flutter project files
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Install Flutter SDK manually from GitHub
       - name: Install Flutter SDK via Flutter Installer Script
         run: |
-          # Define the path for FLUTTER_ROOT explicitly
           export FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
-          
-          # Remove any previous Flutter SDK if exists
           rm -rf $FLUTTER_ROOT
-          
-          # Clone the Flutter SDK from GitHub into the correct directory
           git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_ROOT
-          
-          # Set FLUTTER_ROOT in the environment for the rest of the job
           echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
-          
-          # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
 
-      # Ensure Flutter is available in the environment
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
           flutter doctor -v
@@ -40,29 +28,25 @@ jobs:
           flutter pub get
           flutter precache --ios
 
-      # Ensure the Flutter Podspec file exists for CocoaPods
       - name: Ensure Flutter Podspec Exists
         run: |
           mkdir -p ios/Flutter
           touch ios/Flutter/Flutter.podspec
           echo "{}" > ios/Flutter/Flutter.podspec
 
-      # Download podhelper.rb if needed
       - name: Download podhelper.rb
         run: |
           mkdir -p /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools
           curl -L https://raw.githubusercontent.com/flutter/flutter/master/packages/flutter_tools/bin/xcode_backend/podhelper.rb -o /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
 
-#          # Check if the file exists after download
-#          ls -l /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
+      - name: Verify podhelper.rb content
+        run: |
+          cat /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
 
-
-      # Install iOS dependencies via CocoaPods
       - name: Install CocoaPods dependencies
         run: |
           cd ios
           pod install
 
-      # Build iOS app without signing (for CI purposes)
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
