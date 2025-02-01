@@ -1,44 +1,37 @@
-name: iOS Build
+name: Build IOS App
 
 on:
   push:
     branches:
       - feature-branch
-
+  pull_request:
+    branches:
+      - feature-branch
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install Flutter
-        run: |
-          git clone https://github.com/flutter/flutter.git -b stable --depth 1
-          echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
-          export PATH="$GITHUB_WORKSPACE/flutter/bin:$PATH"
-          flutter --version
-
-      - name: Install Xcode Command Line Tools
-        run: sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.3'
+          cache: true
 
       - name: Install CocoaPods
+        run: sudo gem install cocoapods
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Install iOS dependencies
         run: |
-          sudo gem install cocoapods
-          pod --version
+          cd ios
+          pod install
 
-      - name: Check Flutter and Xcode setup
-        run: |
-          flutter doctor -v
-          xcodebuild -version
-
-      - name: Build iOS IPA (No Code Signing)
-        run: flutter build ipa --no-codesign --verbose
-
-      - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-build
-          path: build/ios/archive/
+      - name: Build iOS app
+        run: flutter build ipa
