@@ -36,9 +36,9 @@ jobs:
       - name: Build iOS App (No Code Signing)
         run: flutter build ios --no-codesign --verbose
 
-      - name: Upload iOS Build Artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/ipa  # Change this path to where the IPA is located
+          path: build/ios/archive/
 
