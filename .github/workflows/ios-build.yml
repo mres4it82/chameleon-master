@@ -50,7 +50,7 @@ jobs:
 
       - name: Verify podhelper.rb content
         run: |
-          cat PODHELPER_PATH
+          cat /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/packages/flutter_tools/bin/podhelper.rb
 
       - name: Install CocoaPods dependencies
         run: |
