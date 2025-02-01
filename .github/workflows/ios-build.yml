@@ -36,19 +36,22 @@ jobs:
 
       - name: Ensure Flutter.podspec exists
         run: |
-          FLUTTER_FRAMEWORK_DIR=$(flutter --cache-dir)/bin/cache/artifacts/engine/ios
+          FLUTTER_ROOT=$(flutter --version | grep 'Flutter' | awk '{print $NF}')
+          FLUTTER_FRAMEWORK_DIR="$FLUTTER_ROOT/bin/cache/artifacts/engine/ios"
+          echo "Checking for Flutter.podspec in: $FLUTTER_FRAMEWORK_DIR"
+          
           if [ ! -f "$FLUTTER_FRAMEWORK_DIR/Flutter.podspec" ]; then
-            echo "Flutter.podspec is missing! Reinstalling Flutter artifacts..."
+            echo "Flutter.podspec is missing! Running flutter precache again..."
             flutter precache --ios
           else
             echo "Flutter.podspec exists. Proceeding with pod install..."
           fi
 
-      - name: Install IOS dependencies
+      - name: Install iOS dependencies
         run: |
           cd ios
           pod repo update
           pod install --verbose
 
-      - name: Build IOS app
+      - name: Build iOS app
         run: flutter build ipa
