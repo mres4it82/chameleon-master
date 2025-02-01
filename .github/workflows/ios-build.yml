@@ -20,7 +20,12 @@ jobs:
         run: |
           git clone https://github.com/flutter/flutter.git -b stable /Users/runner/flutter
           echo "FLUTTER_ROOT=/Users/runner/flutter" >> $GITHUB_ENV
+          echo "PATH=$FLUTTER_ROOT/bin:$PATH" >> $GITHUB_ENV
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
+      - name: Verify Flutter Installation
+        run: |
+          source $GITHUB_ENV
+          which flutter || echo "❌ Flutter not found in PATH!"
           flutter doctor -v
 
       - name: Force Flutter to Download Required Artifacts
