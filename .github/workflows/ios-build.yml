@@ -13,6 +13,11 @@ jobs:
       - name: Verify Flutter SDK Path
         run: echo $FLUTTER_ROOT
 
+      - name: Verify if podhelper.rb exists
+        run: |
+          echo "Flutter SDK Path: $FLUTTER_ROOT"
+          ls -l $FLUTTER_ROOT/packages/flutter_tools/podhelper.rb
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
