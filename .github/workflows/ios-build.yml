@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Verify Flutter SDK Path
-      - run: echo $FLUTTER_ROOT
+        run: echo $FLUTTER_ROOT
 
       - name: Checkout Repository
         uses: actions/checkout@v4
