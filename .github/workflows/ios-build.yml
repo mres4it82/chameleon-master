@@ -15,26 +15,28 @@ jobs:
         run: |
           # Define the path for FLUTTER_ROOT explicitly
           export FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
-
+          
           # Remove any previous Flutter SDK if exists
           rm -rf $FLUTTER_ROOT
-
+          
           # Clone the Flutter SDK from GitHub into the correct directory
           git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_ROOT
-
+          
           # Set FLUTTER_ROOT in the environment for the rest of the job
           echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
-
+          
           # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
-
+          
+          # Clear the Flutter cache and ensure everything is fresh
+          flutter clean
+          flutter doctor -v
+          
           # Verify Flutter SDK installation
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
-
           ls $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb
-
       # Step to verify Flutter installation with flutter doctor
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
