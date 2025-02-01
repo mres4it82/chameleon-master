@@ -39,7 +39,7 @@ jobs:
           flutter precache --ios
           flutter clean
           flutter pub get
-          flutter build ios --no-codesign || true
+#          flutter build ios --no-codesign || true
 
           PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
 
