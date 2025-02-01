@@ -44,7 +44,7 @@ jobs:
 
           if [ ! -f "$PODHELPER_PATH" ]; then
             echo "podhelper.rb is missing. Regenerating..."
-            flutter build ios --no-codesign || true
+#            flutter build ios --no-codesign || true
           fi
 
           ls -l "$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/"
