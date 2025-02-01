@@ -13,9 +13,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Use Flutter Installed by Actions
-        run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
-
       - name: Setup Flutter (Pre-installed Version)
         uses: subosito/flutter-action@v2
         with:
@@ -26,7 +23,6 @@ jobs:
         run: |
           flutter doctor -v
           flutter --version
-      
 
       - name: Force Flutter to Download Required Artifacts
         run: |
@@ -36,20 +32,12 @@ jobs:
           flutter precache --ios
           ls -R $FLUTTER_ROOT/bin/cache/artifacts  
 
-      - name: Verify Flutter SDK Installation
-        run: |
-          flutter doctor -v
-          flutter clean
-          flutter pub get
-          flutter precache --ios
-
       - name: Debug Flutter Artifacts
         run: |
           echo "Checking Flutter artifacts directory..."
+          ls -R $FLUTTER_ROOT/bin/cache/artifacts || echo "⚠️ artifacts directory missing!"
           ls -R $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools || echo "⚠️ flutter_tools directory missing!"
-
-      - name: Debug podhelper.rb Path
-        run: ls -R $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools
+          ls -l $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb || echo "⚠️ podhelper.rb missing!"
 
       - name: Ensure Flutter Podspec Exists
         run: |
@@ -60,10 +48,6 @@ jobs:
       - name: Ensure podhelper.rb Exists
         run: |
           PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
-
-          echo "🛠 Clearing Flutter cache..."
-          flutter clean
-          rm -rf "$FLUTTER_ROOT/bin/cache"
 
           echo "🔄 Fetching dependencies..."
           flutter pub get
