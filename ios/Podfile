@@ -5,6 +5,9 @@ platform :ios, '12.0'
 flutter_root = File.expand_path('..', Dir.pwd) + '/flutter'
 load File.join(flutter_root, 'flutter_export_environment.rb') if File.exist?(File.join(flutter_root, 'flutter_export_environment.rb'))
 
+flutter_application_path = '../..'
+load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
+
 
 target 'Runner' do
   use_frameworks!
