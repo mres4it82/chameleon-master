@@ -1,34 +1,44 @@
-name: Flutter Build
+name: Flutter iOS Build
 
 on:
   push:
     branches:
-      - feature-branch
+      - feature-branch  # Trigger on push to main branch, modify if needed
   pull_request:
     branches:
-      - feature-branch
+      - feature-branch  # Trigger on PR to the main branch, modify if needed
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-latest  # Use macOS for iOS builds
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.3'
+          flutter-version: '3.27.3'  # Set Flutter version (adjust if necessary)
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Install Dependencies
+        run: |
+          flutter pub get
 
-      - name: Run Flutter tests
-        run: flutter test
+      - name: Build iOS App
+        run: |
+          flutter build ios --release
 
-      - name: Build iOS app for simulator
-        run: flutter build ios --no-codesign
+      - name: Archive iOS App (optional)
+        run: |
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -archivePath $PWD/build/Runner.xcarchive archive
 
-      - name: Run on iOS simulator
-        run: flutter run --no-codesign
+      - name: Export iOS IPA (optional)
+        run: |
+          xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ios/Runner/ExportOptions.plist -exportPath $PWD/build
+
+      - name: Upload IPA to GitHub (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: ipa
+          path: build/Runner.ipa
