@@ -18,11 +18,18 @@ jobs:
 
       - name: Install Flutter SDK
         run: |
-          export FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
-          rm -rf $FLUTTER_ROOT
-          git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_ROOT
-          echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
+          git clone https://github.com/flutter/flutter.git -b stable /Users/runner/flutter
+          echo "FLUTTER_ROOT=/Users/runner/flutter" >> $GITHUB_ENV
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
+          flutter doctor -v
+
+      - name: Force Flutter to Download Required Artifacts
+        run: |
+          flutter doctor -v
+          flutter clean
+          flutter pub get
+          flutter precache --ios
+          ls -R $FLUTTER_ROOT/bin/cache/artifacts  
 
       - name: Verify Flutter SDK Installation
         run: |
@@ -30,6 +37,11 @@ jobs:
           flutter clean
           flutter pub get
           flutter precache --ios
+
+      - name: Debug Flutter Artifacts
+        run: |
+          echo "Checking Flutter artifacts directory..."
+          ls -R $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools || echo "⚠️ flutter_tools directory missing!"
 
       - name: Debug podhelper.rb Path
         run: ls -R $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools
