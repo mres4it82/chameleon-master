@@ -37,8 +37,8 @@ jobs:
 #          flutter pub get
 #          flutter build ios --no-codesign
 
-      - name: Verify Flutter.podspec
-        run: ls -la ios/.symlinks/flutter/
+#      - name: Verify Flutter.podspec
+#        run: ls -la ios/.symlinks/flutter/
 
       - name: Install CocoaPods
         run: sudo gem install cocoapods
