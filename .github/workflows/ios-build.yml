@@ -15,7 +15,9 @@ jobs:
           rm -rf $FLUTTER_ROOT
           curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.27.3-stable.zip
           unzip flutter_macos_3.27.3-stable.zip
+          mkdir -p /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64  # Create the target directory if it doesn't exist
           mv flutter /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
+      
       
       
 
