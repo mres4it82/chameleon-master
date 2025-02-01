@@ -24,9 +24,9 @@ jobs:
       - name: Verify Flutter SDK Installation
         run: |
           flutter doctor -v
-          flutter precache --ios
           flutter clean
           flutter pub get
+          flutter precache --ios
 
       - name: Ensure Flutter Podspec Exists
         run: |
@@ -37,13 +37,13 @@ jobs:
       - name: Ensure podhelper.rb Exists
         run: |
           PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
-          flutter doctor -v
+
           flutter clean
           flutter pub get
           flutter precache --ios
 
           if [ ! -f "$PODHELPER_PATH" ]; then
-            echo "podhelper.rb is missing! Running workaround..."
+            echo "⚠️ podhelper.rb is missing! Running workaround..."
             flutter build ios --no-codesign || true  # Forces Flutter to regenerate necessary files
           fi
 
@@ -51,13 +51,11 @@ jobs:
             echo "✅ podhelper.rb found!"
           else
             echo "❌ podhelper.rb is STILL missing!"
-            exit 1  # Fails the workflow if not found
+            exit 1  # Fails workflow if not found
           fi
 
       - name: Install CocoaPods dependencies
         run: |
-          flutter clean
-          flutter pub get
           cd ios
           pod install --verbose
 
