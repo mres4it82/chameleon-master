@@ -16,7 +16,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.3'  # Adjust if needed
+          flutter-version: '3.27.3'
 
       - name: Install Flutter Dependencies
         run: flutter pub get
@@ -26,16 +26,21 @@ jobs:
 
       - name: Clean and Recreate Flutter Podspec
         run: |
+          set -x
           flutter clean
           flutter pub get
+          ls -la ios/Flutter/
           rm -rf ios/Pods ios/Podfile.lock
-          flutter build ios --no-codesign
+          flutter build ios --no-codesign || true
 
-      - name: Install CocoaPods Dependencies
+      - name: Ensure Flutter Podspec Exists
+        run: ls -la ios/Flutter/
+
+      - name: Install CocoaPods Dependencies (Verbose)
         run: |
           cd ios
           pod repo update
-          pod install --verbose
+          pod install --verbose --debug
 
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
