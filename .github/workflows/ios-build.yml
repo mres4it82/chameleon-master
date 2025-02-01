@@ -1,4 +1,4 @@
-name: Build IOS App
+name: Build iOS App
 
 on:
   push:
@@ -31,25 +31,19 @@ jobs:
       - name: Clean project
         run: flutter clean
 
+      - name: Ensure Flutter iOS Artifacts Exist
+        run: |
+          flutter precache --ios
+          flutter pub get
+          flutter build ios --no-codesign
+
       - name: Install CocoaPods
         run: sudo gem install cocoapods
-
-      - name: Ensure Flutter.podspec exists
-        run: |
-          FLUTTER_ROOT=$(flutter --version | grep 'Flutter' | awk '{print $NF}')
-          FLUTTER_FRAMEWORK_DIR="$FLUTTER_ROOT/bin/cache/artifacts/engine/ios"
-          echo "Checking for Flutter.podspec in: $FLUTTER_FRAMEWORK_DIR"
-          
-          if [ ! -f "$FLUTTER_FRAMEWORK_DIR/Flutter.podspec" ]; then
-            echo "Flutter.podspec is missing! Running flutter precache again..."
-            flutter precache --ios
-          else
-            echo "Flutter.podspec exists. Proceeding with pod install..."
-          fi
 
       - name: Install iOS dependencies
         run: |
           cd ios
+          rm -rf Pods Podfile.lock
           pod repo update
           pod install --verbose
 
