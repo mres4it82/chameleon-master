@@ -28,4 +28,7 @@ jobs:
         run: |
           mkdir -p ios/Flutter
           touch ios/Flutter/Flutter.podspec
-          echo "{}" > ios/Flutter/Flutter.po
+          echo "{}" > ios/Flutter/Flutter.podspec
+
+      - name: Build iOS App (Without Signing)
+        run: flutter build ios --release --no-codesign
