@@ -1,51 +1,44 @@
-name: iOS IPA Build (No Mac Needed)
+name: Build iOS App (No Mac Needed)
 
 on:
   push:
     branches:
-      - feature-branch  # Change this if your branch is different
+      - feature-branch  # Change this to your preferred branch if necessary
+  pull_request:
+    branches:
+      - feature-branch
 
 jobs:
   build:
-    runs-on: macos-14  # Use the latest macOS version
+    runs-on: macos-latest  # Ensures macOS environment is used for iOS build
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4  # Updated to latest version
+        uses: actions/checkout@v3
 
-      - name: Install Flutter
+      - name: Set up Flutter
         run: |
           git clone https://github.com/flutter/flutter.git -b stable --depth 1
           echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
-          export PATH="$GITHUB_WORKSPACE/flutter/bin:$PATH"
           flutter --version
-
-      - name: Install Xcode Command Line Tools
-        run: sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer
 
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           pod --version
 
-      - name: Clean and Install Dependencies
+      - name: Install Flutter Dependencies
         run: |
-          flutter clean
           flutter pub get
           cd ios
-          rm -rf Pods Podfile.lock
-          pod cache clean --all
-          pod repo update
-          pod deintegrate
-          pod setup
           pod install --repo-update
-          cd ..
 
-      - name: Build iOS IPA (No Code Signing)
+      - name: Build iOS App (No Code Signing)
         run: flutter build ios --no-codesign --verbose
 
-      - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v4  # Updated to latest version
+      - name: Upload iOS Build Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: ios-build
-          path: build/ios/archive/
+          path: build/ios/ipa  # Change this path to where the IPA is located
+
