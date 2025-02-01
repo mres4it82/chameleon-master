@@ -32,16 +32,12 @@ jobs:
           # Add Flutter to the PATH environment variable
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
 
- 
-
       # Ensure Flutter is available in the environment
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
-#          flutter doctor --android-licenses
           flutter doctor -v
           flutter clean
           flutter pub get
-          flutter precache --ios
           flutter precache --ios
 
       # Ensure the Flutter Podspec file exists for CocoaPods
