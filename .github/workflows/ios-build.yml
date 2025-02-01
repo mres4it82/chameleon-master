@@ -10,14 +10,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Verify Flutter SDK Path
-        run: echo $FLUTTER_ROOT
-
-      - name: Verify if podhelper.rb exists
-        run: |
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
-          ls -l $FLUTTER_ROOT/packages/flutter_tools/podhelper.rb
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -26,8 +18,14 @@ jobs:
         with:
           flutter-version: '3.27.3'
 
-      - name: Install CocoaPods
-        run: sudo gem install cocoapods
+      # Set FLUTTER_ROOT environment variable explicitly
+      - name: Set Flutter SDK Path
+        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64" >> $GITHUB_ENV
+
+      - name: Verify Flutter SDK Path
+        run: |
+          echo "Flutter SDK Path: $FLUTTER_ROOT"
+          ls -l $FLUTTER_ROOT/packages/flutter_tools/podhelper.rb
 
       - name: Install Flutter Dependencies
         run: flutter pub get
@@ -40,9 +38,6 @@ jobs:
           mkdir -p ios/Flutter
           touch ios/Flutter/Flutter.podspec
           echo "{}" > ios/Flutter/Flutter.podspec
-
-      - name: Install Pods
-        run: cd ios && pod install
 
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
