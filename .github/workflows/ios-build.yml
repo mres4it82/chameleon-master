@@ -35,8 +35,8 @@ jobs:
       # Install Android SDK manually (without Android Studio)
       - name: Set up Android SDK
         run: |
-          # Set up Android SDK path
-          export ANDROID_SDK_ROOT=/opt/android-sdk
+          # Set up Android SDK path in a writable location
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
           mkdir -p $ANDROID_SDK_ROOT
           
           # Install the required SDK packages (build-tools, platform-tools, etc.)
