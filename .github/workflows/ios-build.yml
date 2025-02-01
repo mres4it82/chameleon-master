@@ -10,66 +10,53 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      # Step to verify if Flutter doctor is reporting any issues
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
-        # Verify Flutter installation and missing components
-         $FLUTTER_ROOT/bin/flutter doctor
+          # Ensure FLUTTER_ROOT is set before running flutter doctor
+          echo "Flutter SDK Path: $FLUTTER_ROOT"
+          $FLUTTER_ROOT/bin/flutter doctor
 
-
+      # Install Flutter SDK manually from GitHub
       - name: Install Flutter SDK via Flutter Installer Script
         run: |
           # Remove previous Flutter SDK if exists
           rm -rf $FLUTTER_ROOT
 
-          # Install Flutter SDK using the official script
+          # Install Flutter SDK using the official GitHub script
           git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_ROOT
 
           # Verify installation
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
-          
-          
-          # Verify the SDK after installation
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
-          ls -l $FLUTTER_ROOT
-          ls -l $FLUTTER_ROOT/packages/flutter_tools/
-      
-      
-      
-      
 
+      # Checkout Repository to get your project files
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-#      - name: Set up Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          flutter-version: '3.27.3'
-
-      # Set FLUTTER_ROOT environment variable explicitly
-#      - name: Set Flutter SDK Path
-#        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64" >> $GITHUB_ENV
-
+      # Ensure Flutter is installed and available in the environment
       - name: Verify Flutter SDK Path and Files
         run: |
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
-          ls -l $FLUTTER_ROOT/packages/flutter_tools/podhelper.rb
-      
 
+      # Install Flutter dependencies
       - name: Install Flutter Dependencies
         run: flutter pub get
 
+      # Pre-cache Flutter for iOS (download iOS-specific dependencies)
       - name: Pre-cache Flutter for iOS
         run: flutter precache --ios
 
+      # Ensure the Flutter Podspec file exists for CocoaPods
       - name: Ensure Flutter Podspec Exists
         run: |
           mkdir -p ios/Flutter
           touch ios/Flutter/Flutter.podspec
           echo "{}" > ios/Flutter/Flutter.podspec
 
+      # Build iOS app without signing (for CI purposes)
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
