@@ -4,7 +4,17 @@ flutter_application_path = ENV['FLUTTER_ROOT']
 # Verify the Flutter SDK path
 puts "Flutter SDK Path: #{flutter_application_path}"
 
-load File.join(flutter_application_path, 'packages', 'flutter_tools', 'podhelper.rb')
+# load File.join(flutter_application_path, 'packages', 'flutter_tools', 'podhelper.rb')
+
+flutter_tools_path = File.join(flutter_application_path, 'packages', 'flutter_tools')
+podhelper_path = File.join(flutter_tools_path, 'podhelper.rb')
+
+if File.exist?(podhelper_path)
+  load podhelper_path
+else
+  raise "podhelper.rb not found at #{podhelper_path}. Make sure you have the correct Flutter SDK installed."
+end
+
 
 target 'Runner' do
   use_frameworks!
