@@ -34,10 +34,20 @@ jobs:
           touch ios/Flutter/Flutter.podspec
           echo "{}" > ios/Flutter/Flutter.podspec
 
-      - name: Download podhelper.rb
+      - name: Ensure podhelper.rb Exists
         run: |
-          mkdir -p /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools
-          curl -L https://raw.githubusercontent.com/flutter/flutter/master/packages/flutter_tools/bin/xcode_backend/podhelper.rb -o /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
+          flutter precache --ios
+          flutter clean
+          flutter pub get
+
+          PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
+
+          if [ ! -f "$PODHELPER_PATH" ]; then
+            echo "podhelper.rb is missing. Regenerating..."
+            flutter build ios --no-codesign || true
+          fi
+
+          ls -l "$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/"
 
       - name: Verify podhelper.rb content
         run: |
