@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Use Flutter Installed by Actions
+        run: echo "FLUTTER_ROOT=$(flutter sdk-path)" >> $GITHUB_ENV
+
       - name: Install Flutter SDK
         run: |
           export FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
@@ -28,6 +31,9 @@ jobs:
           flutter pub get
           flutter precache --ios
 
+      - name: Debug podhelper.rb Path
+        run: ls -R $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools
+
       - name: Ensure Flutter Podspec Exists
         run: |
           mkdir -p ios/Flutter
@@ -38,23 +44,22 @@ jobs:
         run: |
           PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
 
-          echo "🛠 Resetting Flutter cache..."
+          echo "🛠 Clearing Flutter cache..."
+          flutter clean
           rm -rf "$FLUTTER_ROOT/bin/cache"
-          rm -rf ios/Pods ios/.symlinks ios/Flutter/Flutter.podspec ios/Flutter/App.framework
-          rm -rf ios/Flutter/Flutter.framework
-          rm -rf ios/Podfile.lock
 
-          flutter doctor -v
-          flutter precache --ios
+          echo "🔄 Fetching dependencies..."
           flutter pub get
+          flutter precache --ios
 
-          echo "🚀 Running Flutter build to force podhelper.rb creation..."
+          echo "🚀 Running Flutter build to regenerate podhelper.rb..."
           flutter build ios --no-codesign || true
 
           if [ -f "$PODHELPER_PATH" ]; then
             echo "✅ podhelper.rb found!"
           else
             echo "❌ podhelper.rb is STILL missing!"
+            ls -l "$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools" # Debugging
             exit 1
           fi
 
