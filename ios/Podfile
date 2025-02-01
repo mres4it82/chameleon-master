@@ -1,8 +1,9 @@
 platform :ios, '12.0'
 
-flutter_application_path = File.expand_path('..', Dir.pwd) + '/flutter'
+# Use the environment variable to get the correct Flutter SDK path
+flutter_application_path = ENV['FLUTTER_ROOT']
 
-# Make sure the correct path to Flutter is used.
+# Load the podhelper.rb from the correct Flutter SDK path
 load File.join(flutter_application_path, 'packages', 'flutter_tools', 'podhelper.rb')
 
 target 'Runner' do
