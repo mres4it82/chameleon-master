@@ -10,13 +10,24 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Reinstall Flutter SDK
+      - name: Clean Flutter SDK and Reinstall
         run: |
+          # Remove existing Flutter SDK directory
           rm -rf $FLUTTER_ROOT
+
+          # Download the latest Flutter SDK ZIP file
           curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.27.3-stable.zip
+
+          # Unzip it and install it to the correct directory
           unzip flutter_macos_3.27.3-stable.zip
-          mkdir -p /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64  # Create the target directory if it doesn't exist
+          mkdir -p /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
           mv flutter /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
+
+          # Verify the SDK after installation
+          echo "Flutter SDK Path: $FLUTTER_ROOT"
+          ls -l $FLUTTER_ROOT
+          ls -l $FLUTTER_ROOT/packages/flutter_tools/
+      
       
       
       
@@ -30,14 +41,16 @@ jobs:
 #          flutter-version: '3.27.3'
 
       # Set FLUTTER_ROOT environment variable explicitly
-      - name: Set Flutter SDK Path
-        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64" >> $GITHUB_ENV
+#      - name: Set Flutter SDK Path
+#        run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64" >> $GITHUB_ENV
 
-      - name: Verify Flutter SDK Path and Check for podhelper.rb
+      - name: Verify Flutter SDK Path and Files
         run: |
           echo "Flutter SDK Path: $FLUTTER_ROOT"
+          ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
           ls -l $FLUTTER_ROOT/packages/flutter_tools/podhelper.rb
+      
 
       - name: Install Flutter Dependencies
         run: flutter pub get
