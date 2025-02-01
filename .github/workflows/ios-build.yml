@@ -12,11 +12,12 @@ jobs:
     steps:
       - name: Reinstall Flutter SDK
         run: |
-         rm -rf $FLUTTER_ROOT
-         curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.27.3-stable.zip
-         unzip flutter_macos_3.27.3-stable.zip
-         mv flutter $FLUTTER_ROOT
-        
+          rm -rf $FLUTTER_ROOT
+          curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.27.3-stable.zip
+          unzip flutter_macos_3.27.3-stable.zip
+          mv flutter /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
+      
+      
 
       - name: Checkout Repository
         uses: actions/checkout@v4
