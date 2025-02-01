@@ -23,7 +23,19 @@ jobs:
         run: echo "PATH=\$PATH:/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin" >> $GITHUB_ENV
 
       - name: Verify Flutter Installation
-        run: flutter doctor -v
+        run: |
+          flutter --version
+          flutter doctor -v
 
-      - name: Run Flutter Setup Script
-        run: $GITHUB_ACTION_PATH/setup.sh -p
+      - name: Run Setup Script with Correct Parameters
+        run: |
+          chmod +x "$GITHUB_ACTION_PATH/setup.sh"
+          $GITHUB_ACTION_PATH/setup.sh -p \
+            -n 'stable' \
+            -f '' \
+            -a 'arm64' \
+            -k '' \
+            -c '' \
+            -l '' \
+            -d 'default' \
+            stable
