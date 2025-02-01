@@ -13,29 +13,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter (Pre-installed Version)
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-          channel: 'stable'
-
-      - name: Add Flutter to PATH
-        run: echo "PATH=\$PATH:/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin" >> $GITHUB_ENV
+      - name: Download and Setup Flutter SDK (Stable)
+        run: |
+          curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.27.3-stable.zip
+          unzip flutter_macos_3.27.3-stable.zip
+          mv flutter /usr/local/flutter
+          echo "export PATH=\$PATH:/usr/local/flutter/bin" >> $GITHUB_ENV
 
       - name: Verify Flutter Installation
         run: |
-          flutter --version
           flutter doctor -v
+          flutter --version
 
-      - name: Run Setup Script with Correct Parameters
+      - name: Install CocoaPods dependencies
         run: |
-          chmod +x "$GITHUB_ACTION_PATH/setup.sh"
-          $GITHUB_ACTION_PATH/setup.sh -p \
-            -n 'stable' \
-            -f '' \
-            -a 'arm64' \
-            -k '' \
-            -c '' \
-            -l '' \
-            -d 'default' \
-            stable
+          cd ios
+          pod install --verbose
+
+      - name: Build iOS App (Without Signing)
+        run: flutter build ios --release --no-codesign
