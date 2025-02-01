@@ -4,7 +4,7 @@ platform :ios, '12.0'
 # Inside your Podfile, update the path for podhelper.rb:
 
 flutter_root = File.expand_path("..", __FILE__)
-podhelper_path = File.join(flutter_root, '.flutter', 'bin', 'cache', 'artifacts', 'flutter_tools', 'podhelper.rb')
+podhelper_path = File.join(flutter_root, '.flutter/bin/cache/artifacts/flutter_tools/podhelper.rb')
 
 if File.exist?(podhelper_path)
   load podhelper_path

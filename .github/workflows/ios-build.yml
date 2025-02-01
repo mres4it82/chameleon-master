@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Flutter SDK via Flutter Installer Script
+      - name: Install Flutter SDK
         run: |
           export FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
           rm -rf $FLUTTER_ROOT
@@ -21,12 +21,12 @@ jobs:
           echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
           echo "$FLUTTER_ROOT/bin" >> $GITHUB_PATH
 
-      - name: Verify Flutter SDK Installation with flutter doctor
+      - name: Verify Flutter SDK Installation
         run: |
           flutter doctor -v
+          flutter precache --ios
           flutter clean
           flutter pub get
-          flutter precache --ios
 
       - name: Ensure Flutter Podspec Exists
         run: |
@@ -36,33 +36,30 @@ jobs:
 
       - name: Ensure podhelper.rb Exists
         run: |
+          PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
           flutter doctor -v
           flutter clean
           flutter pub get
-          flutter tools
           flutter precache --ios
-#          flutter build ios --no-codesign || true  # Forces Flutter to generate necessary files
 
-          PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
-               
           if [ ! -f "$PODHELPER_PATH" ]; then
-           echo "podhelper.rb is missing. Searching for it..."
-           find $FLUTTER_ROOT -name "podhelper.rb"
-          else
-           echo "podhelper.rb found!"
-           fi
+            echo "podhelper.rb is missing! Running workaround..."
+            flutter build ios --no-codesign || true  # Forces Flutter to regenerate necessary files
+          fi
 
-#      - name: Verify podhelper.rb content
-#        run: |
-#          cat /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/packages/flutter_tools/bin/podhelper.rb
+          if [ -f "$PODHELPER_PATH" ]; then
+            echo "✅ podhelper.rb found!"
+          else
+            echo "❌ podhelper.rb is STILL missing!"
+            exit 1  # Fails the workflow if not found
+          fi
 
       - name: Install CocoaPods dependencies
         run: |
           flutter clean
           flutter pub get
-          
           cd ios
-          pod install
+          pod install --verbose
 
       - name: Build iOS App (Without Signing)
         run: flutter build ios --release --no-codesign
