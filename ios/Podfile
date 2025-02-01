@@ -1,9 +1,9 @@
 platform :ios, '12.0'
 
-# Set the Flutter root path
-flutter_root = '/path/to/flutter'  # Adjust this path to your Flutter SDK or project location
+# Set the correct path to your local Flutter installation or global SDK
+flutter_root = File.expand_path('..', Dir.pwd) + '/flutter'  # Adjust this if needed
 
-# Load Flutter's environment script
+# Load the Flutter environment and paths
 load File.join(flutter_root, 'packages/flutter_tools/bin/xcode_backend/flutter_export_environment.rb') if File.exist?(File.join(flutter_root, 'packages/flutter_tools/bin/xcode_backend/flutter_export_environment.rb'))
 
 target 'Runner' do
