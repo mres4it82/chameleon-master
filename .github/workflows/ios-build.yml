@@ -10,13 +10,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # Step to verify if Flutter doctor is reporting any issues
-      - name: Verify Flutter SDK Installation with flutter doctor
-        run: |
-          # Ensure FLUTTER_ROOT is set before running flutter doctor
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
-          $FLUTTER_ROOT/bin/flutter doctor
-
       # Install Flutter SDK manually from GitHub
       - name: Install Flutter SDK via Flutter Installer Script
         run: |
@@ -26,10 +19,20 @@ jobs:
           # Install Flutter SDK using the official GitHub script
           git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_ROOT
 
+          # Ensure FLUTTER_ROOT is set
+          echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
+
           # Verify installation
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
+
+      # Step to verify if Flutter doctor is reporting any issues
+      - name: Verify Flutter SDK Installation with flutter doctor
+        run: |
+          # Ensure FLUTTER_ROOT is set before running flutter doctor
+          echo "Flutter SDK Path: $FLUTTER_ROOT"
+          $FLUTTER_ROOT/bin/flutter doctor
 
       # Checkout Repository to get your project files
       - name: Checkout Repository
