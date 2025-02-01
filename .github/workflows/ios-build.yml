@@ -10,6 +10,17 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Run flutter doctor
+        run: |
+          flutter doctor -v
+          flutter clean
+          flutter precache --ios
+
+      - name: Clean Flutter and Pre-cache iOS dependencies
+        run: |
+          flutter clean
+          flutter precache --ios
+
       # Install Flutter SDK manually from GitHub
       - name: Install Flutter SDK via Flutter Installer Script
         run: |
@@ -32,6 +43,9 @@ jobs:
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
+
+          ls $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb
+          
 
       # Step to verify Flutter installation with flutter doctor
       - name: Verify Flutter SDK Installation with flutter doctor
