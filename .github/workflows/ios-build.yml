@@ -1,46 +1,47 @@
-name: Flutter iOS Build
+name: Flutter iOS Build (No Signing)
 
 on:
   push:
     branches:
-      - feature-branch  # Trigger on push to main branch, modify if needed
-  pull_request:
-    branches:
-      - feature-branch  # Trigger on PR to the main branch, modify if needed
+      - feature-branch
 
 jobs:
   build:
-    runs-on: macos-latest  # Use macOS for iOS builds
+    runs-on: macos-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.3'  # Set Flutter version (adjust if necessary)
+          flutter-version: '3.27.3'  # Adjust if needed
 
-      - name: Install Dependencies
+      - name: Install Flutter Dependencies
+        run: flutter pub get
+
+      - name: Pre-cache Flutter for iOS
+        run: flutter precache --ios
+
+      - name: Clean and Recreate Flutter Podspec
         run: |
+          flutter clean
           flutter pub get
+          rm -rf ios/Pods ios/Podfile.lock
+          flutter build ios --no-codesign
 
-      - name: Build iOS App
+      - name: Install CocoaPods Dependencies
         run: |
-          flutter build ios --release --no-codesign
+          cd ios
+          pod repo update
+          pod install --verbose
 
-      - name: Archive iOS App (optional)
-        run: |
-          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -archivePath $PWD/build/Runner.xcarchive archive
+      - name: Build iOS App (Without Signing)
+        run: flutter build ios --release --no-codesign
 
-      - name: Export iOS IPA (optional)
-        run: |
-          xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ios/Runner/ExportOptions.plist -exportPath $PWD/build
-
-      - name: Upload IPA to GitHub (optional)
+      - name: Upload Build Artifact (Optional)
         uses: actions/upload-artifact@v4
         with:
-          name: ipa
-          path: build/Runner.ipa
-
-
+          name: ios-build
+          path: build/ios
