@@ -10,14 +10,8 @@ jobs:
     runs-on: macos-latest
 
     steps:
-
-
-
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Add Flutter to PATH
-        run: echo "PATH=\$PATH:/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin" >> $GITHUB_ENV
 
       - name: Setup Flutter (Pre-installed Version)
         uses: subosito/flutter-action@v2
@@ -25,58 +19,11 @@ jobs:
           flutter-version: 'stable'
           channel: 'stable'
 
+      - name: Add Flutter to PATH
+        run: echo "PATH=\$PATH:/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin" >> $GITHUB_ENV
+
       - name: Verify Flutter Installation
         run: flutter doctor -v
 
-      - name: Debug Flutter SDK Setup
-        run: |
-          echo "Checking Flutter SDK location..."
-          ls -R $FLUTTER_ROOT
-
-      - name: Force Flutter to Download Required Artifacts
-        run: |
-          flutter doctor -v
-          flutter clean
-          flutter pub get
-          flutter precache --ios
-          ls -R $FLUTTER_ROOT/bin/cache/artifacts  
-
-      - name: Debug Flutter Artifacts
-        run: |
-          echo "Checking Flutter artifacts directory..."
-          ls -R $FLUTTER_ROOT/bin/cache/artifacts || echo "⚠️ artifacts directory missing!"
-          ls -R $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools || echo "⚠️ flutter_tools directory missing!"
-          ls -l $FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb || echo "⚠️ podhelper.rb missing!"
-
-      - name: Ensure Flutter Podspec Exists
-        run: |
-          mkdir -p ios/Flutter
-          touch ios/Flutter/Flutter.podspec
-          echo "{}" > ios/Flutter/Flutter.podspec
-
-      - name: Ensure podhelper.rb Exists
-        run: |
-          PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
-
-          echo "🔄 Fetching dependencies..."
-          flutter pub get
-          flutter precache --ios
-
-          echo "🚀 Running Flutter build to regenerate podhelper.rb..."
-          flutter build ios --no-codesign || true
-
-          if [ -f "$PODHELPER_PATH" ]; then
-            echo "✅ podhelper.rb found!"
-          else
-            echo "❌ podhelper.rb is STILL missing!"
-            ls -l "$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools" # Debugging
-            exit 1
-          fi
-
-      - name: Install CocoaPods dependencies
-        run: |
-          cd ios
-          pod install --verbose
-
-      - name: Build iOS App (Without Signing)
-        run: flutter build ios --release --no-codesign
+      - name: Run Flutter Setup Script
+        run: $GITHUB_ACTION_PATH/setup.sh -p
