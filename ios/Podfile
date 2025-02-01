@@ -1,27 +1,22 @@
 platform :ios, '12.0'
 
-# In your Podfile
-# Inside your Podfile, update the path for podhelper.rb:
-
-flutter_root = File.expand_path("..", __FILE__)
+# Define Flutter paths
+flutter_root = File.expand_path("..", File.dirname(__FILE__))
+flutter_application_path = File.expand_path("..", flutter_root)
 podhelper_path = File.join(flutter_root, '.flutter/bin/cache/artifacts/flutter_tools/podhelper.rb')
 
+# Ensure podhelper.rb exists
 if File.exist?(podhelper_path)
   load podhelper_path
 else
   raise "podhelper.rb not found at #{podhelper_path}. Run `flutter pub get` and retry."
 end
 
-
-
-
-
-
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'Flutter', :path => flutter_application_path
+  pod 'Flutter', :path => "#{flutter_application_path}/.flutter/bin/cache/artifacts/engine/ios"
 
   # Your other dependencies
   pod 'DKPhotoGallery', :modular_headers => true
