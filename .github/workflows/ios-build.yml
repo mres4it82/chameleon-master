@@ -33,9 +33,10 @@ jobs:
       - name: Set Flutter SDK Path
         run: echo "FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64" >> $GITHUB_ENV
 
-      - name: Verify Flutter SDK Path
+      - name: Verify Flutter SDK Path and Check for podhelper.rb
         run: |
           echo "Flutter SDK Path: $FLUTTER_ROOT"
+          ls -l $FLUTTER_ROOT/packages/flutter_tools/
           ls -l $FLUTTER_ROOT/packages/flutter_tools/podhelper.rb
 
       - name: Install Flutter Dependencies
