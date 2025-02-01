@@ -34,9 +34,20 @@ jobs:
       - name: Install CocoaPods
         run: sudo gem install cocoapods
 
+      - name: Ensure Flutter.podspec exists
+        run: |
+          FLUTTER_FRAMEWORK_DIR=$(flutter --cache-dir)/bin/cache/artifacts/engine/ios
+          if [ ! -f "$FLUTTER_FRAMEWORK_DIR/Flutter.podspec" ]; then
+            echo "Flutter.podspec is missing! Reinstalling Flutter artifacts..."
+            flutter precache --ios
+          else
+            echo "Flutter.podspec exists. Proceeding with pod install..."
+          fi
+
       - name: Install IOS dependencies
         run: |
           cd ios
+          pod repo update
           pod install --verbose
 
       - name: Build IOS app
