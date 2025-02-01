@@ -38,18 +38,19 @@ jobs:
         run: |
           PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
 
-          flutter clean
-          flutter pub get
-          flutter precache --ios
-
-          # Force Flutter to regenerate missing iOS dependencies
+          echo "🛠 Resetting Flutter cache..."
           rm -rf "$FLUTTER_ROOT/bin/cache"
+          rm -rf ios/Pods ios/.symlinks ios/Flutter/Flutter.podspec ios/Flutter/App.framework
+          rm -rf ios/Flutter/Flutter.framework
+          rm -rf ios/Podfile.lock
+
           flutter doctor -v
-          flutter pub get
           flutter precache --ios
+          flutter pub get
+
+          echo "🚀 Running Flutter build to force podhelper.rb creation..."
           flutter build ios --no-codesign || true
 
-          # Verify podhelper.rb exists
           if [ -f "$PODHELPER_PATH" ]; then
             echo "✅ podhelper.rb found!"
           else
