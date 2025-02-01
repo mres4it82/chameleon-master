@@ -1,11 +1,11 @@
 platform :ios, '12.0'
 
-# Define Flutter paths
-flutter_root = File.expand_path("..", File.dirname(__FILE__))
+# Set Flutter paths correctly
+flutter_root = File.expand_path("..", File.dirname(__FILE__)) # Adjusted root detection
 flutter_application_path = File.expand_path("..", flutter_root)
-podhelper_path = File.join(flutter_root, '.flutter/bin/cache/artifacts/flutter_tools/podhelper.rb')
+podhelper_path = File.join(flutter_root, 'ios/.flutter/bin/cache/artifacts/flutter_tools/podhelper.rb')
 
-# Ensure podhelper.rb exists
+# Ensure podhelper.rb exists before loading
 if File.exist?(podhelper_path)
   load podhelper_path
 else
@@ -18,7 +18,7 @@ target 'Runner' do
 
   pod 'Flutter', :path => "#{flutter_application_path}/.flutter/bin/cache/artifacts/engine/ios"
 
-  # Your other dependencies
+  # Other dependencies
   pod 'DKPhotoGallery', :modular_headers => true
   pod 'SDWebImage', :modular_headers => true
 
