@@ -47,6 +47,12 @@ jobs:
           touch ios/Flutter/Flutter.podspec
           echo "{}" > ios/Flutter/Flutter.podspec
 
+      # Download podhelper.rb if needed
+      - name: Download podhelper.rb
+        run: |
+          curl -L https://raw.githubusercontent.com/flutter/flutter/master/packages/flutter_tools/bin/xcode_backend/podhelper.rb -o /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
+      
+
       # Install iOS dependencies via CocoaPods
       - name: Install CocoaPods dependencies
         run: |
