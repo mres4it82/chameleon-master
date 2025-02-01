@@ -37,11 +37,8 @@ jobs:
       - name: Ensure podhelper.rb Exists
         run: |
           flutter precache --ios
-          flutter clean
-          flutter pub get
           
-
-          PODHELPER_PATH="$FLUTTER_ROOT/bin/cache/artifacts/flutter_tools/podhelper.rb"
+          PODHELPER_PATH="/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/packages/flutter_tools/bin/podhelper.rb"
 
           if [ ! -f "$PODHELPER_PATH" ]; then
             echo "podhelper.rb is missing. Trying alternative paths..."
@@ -53,10 +50,13 @@ jobs:
 
       - name: Verify podhelper.rb content
         run: |
-          cat /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/packages/flutter_tools/bin/podhelper.rb
+          cat PODHELPER_PATH
 
       - name: Install CocoaPods dependencies
         run: |
+          flutter clean
+          flutter pub get
+          
           cd ios
           pod install
 
