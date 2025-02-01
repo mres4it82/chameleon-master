@@ -10,6 +10,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      # Checkout the repository to access your Flutter project files
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       # Install Flutter SDK manually from GitHub
       - name: Install Flutter SDK via Flutter Installer Script
         run: |
@@ -35,11 +39,7 @@ jobs:
           flutter clean
           flutter precache --ios
 
-      # Checkout Repository to get your project files
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      # Install Flutter dependencies
+      # Install Flutter dependencies (pubspec.yaml must exist at this point)
       - name: Install Flutter Dependencies
         run: flutter pub get
 
