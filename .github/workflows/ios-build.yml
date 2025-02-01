@@ -1,4 +1,4 @@
-name: Flutter iOS Build (No Signing)
+name: Flutter iOS Build
 
 on:
   push:
@@ -10,6 +10,9 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Verify Flutter SDK Path
+        run: echo $FLUTTER_ROOT
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 
