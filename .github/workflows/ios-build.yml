@@ -52,6 +52,9 @@ jobs:
         run: |
           mkdir -p /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools
           curl -L https://raw.githubusercontent.com/flutter/flutter/master/packages/flutter_tools/bin/xcode_backend/podhelper.rb -o /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
+          
+          # Check if the file exists after download
+          ls -l /Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64/bin/cache/artifacts/flutter_tools/podhelper.rb
 
 
       # Install iOS dependencies via CocoaPods
