@@ -22,18 +22,22 @@ jobs:
           flutter-version: '3.27.3'
           cache: true
 
-      - name: Ensure iOS Flutter module exists
-        run: flutter precache && flutter pub get && flutter build ios --no-codesign
+      - name: Precache Flutter artifacts
+        run: flutter precache --ios
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Clean project
+        run: flutter clean
 
       - name: Install CocoaPods
         run: sudo gem install cocoapods
 
-      - name: Install iOS dependencies
+      - name: Install IOS dependencies
         run: |
           cd ios
-          rm -rf Flutter
-          flutter pub get
-          pod install
+          pod install --verbose
 
-      - name: Build IOS App
+      - name: Build IOS app
         run: flutter build ipa
