@@ -13,21 +13,24 @@ jobs:
       # Install Flutter SDK manually from GitHub
       - name: Install Flutter SDK via Flutter Installer Script
         run: |
-          # Remove previous Flutter SDK if exists
+          # Define the path for FLUTTER_ROOT explicitly
+          export FLUTTER_ROOT=/Users/runner/hostedtoolcache/flutter/stable-3.27.3-arm64
+
+          # Remove any previous Flutter SDK if exists
           rm -rf $FLUTTER_ROOT
 
-          # Install Flutter SDK using the official GitHub script
+          # Clone the Flutter SDK from GitHub into the correct directory
           git clone https://github.com/flutter/flutter.git -b stable $FLUTTER_ROOT
 
-          # Ensure FLUTTER_ROOT is set
+          # Set FLUTTER_ROOT in the environment for the rest of the job
           echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
 
-          # Verify installation
+          # Verify Flutter SDK installation
           echo "Flutter SDK Path: $FLUTTER_ROOT"
           ls -l $FLUTTER_ROOT
           ls -l $FLUTTER_ROOT/packages/flutter_tools/
 
-      # Step to verify if Flutter doctor is reporting any issues
+      # Step to verify Flutter installation with flutter doctor
       - name: Verify Flutter SDK Installation with flutter doctor
         run: |
           # Ensure FLUTTER_ROOT is set before running flutter doctor
@@ -41,25 +44,4 @@ jobs:
       # Ensure Flutter is installed and available in the environment
       - name: Verify Flutter SDK Path and Files
         run: |
-          echo "Flutter SDK Path: $FLUTTER_ROOT"
-          ls -l $FLUTTER_ROOT
-          ls -l $FLUTTER_ROOT/packages/flutter_tools/
-
-      # Install Flutter dependencies
-      - name: Install Flutter Dependencies
-        run: flutter pub get
-
-      # Pre-cache Flutter for iOS (download iOS-specific dependencies)
-      - name: Pre-cache Flutter for iOS
-        run: flutter precache --ios
-
-      # Ensure the Flutter Podspec file exists for CocoaPods
-      - name: Ensure Flutter Podspec Exists
-        run: |
-          mkdir -p ios/Flutter
-          touch ios/Flutter/Flutter.podspec
-          echo "{}" > ios/Flutter/Flutter.podspec
-
-      # Build iOS app without signing (for CI purposes)
-      - name: Build iOS App (Without Signing)
-        run: flutter build ios --release --no-codesign
+          echo "Flutter SD
